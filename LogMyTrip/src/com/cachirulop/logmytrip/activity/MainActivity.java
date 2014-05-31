@@ -1,5 +1,10 @@
 
-package com.cachirulop.logmytrip;
+package com.cachirulop.logmytrip.activity;
+
+import com.cachirulop.logmytrip.R;
+import com.cachirulop.logmytrip.R.id;
+import com.cachirulop.logmytrip.R.layout;
+import com.cachirulop.logmytrip.R.menu;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -71,6 +76,11 @@ public class MainActivity
                                               false);
             return rootView;
         }
+    }
+    
+    public void onActivateServiceClick (View v) 
+    {
+        
     }
 
 }

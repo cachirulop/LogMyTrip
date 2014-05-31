@@ -2,7 +2,11 @@
 <resources>
 
     <string name="app_name">Log My Trip</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Main activity -->
+    <string name="tbActivateServiceText">Activate service</string>
+    <string name="tvActivateServiceDescText">Activate service</string>
+    <string name="tvSavedLogsDescText">Saved logs</string>
 
 </resources>
