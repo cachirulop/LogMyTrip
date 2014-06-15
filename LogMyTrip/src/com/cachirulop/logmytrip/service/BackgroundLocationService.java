@@ -64,7 +64,7 @@ public class BackgroundLocationService extends Service implements
         mLocationRequest = LocationRequest.create();
 
         // Use high accuracy
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         // Set the update interval
         mLocationRequest.setInterval(mUpdateInterval);

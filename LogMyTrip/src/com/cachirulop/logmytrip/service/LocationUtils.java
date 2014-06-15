@@ -21,10 +21,10 @@ public final class LocationUtils
     public static final int MILLISECONDS_PER_SECOND = 1000;
 
     // The update interval
-    public static final int UPDATE_INTERVAL_IN_SECONDS = 300;
+    public static final int UPDATE_INTERVAL_IN_SECONDS = 5;
 
     // A fast interval ceiling
-    public static final int FAST_CEILING_IN_SECONDS = 20;
+    public static final int FAST_CEILING_IN_SECONDS = 5;
 
     // Update interval in milliseconds
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS =
