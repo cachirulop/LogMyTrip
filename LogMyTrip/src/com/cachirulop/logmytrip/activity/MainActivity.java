@@ -1,25 +1,25 @@
 
 package com.cachirulop.logmytrip.activity;
 
-import com.cachirulop.logmytrip.R;
-import com.cachirulop.logmytrip.R.id;
-import com.cachirulop.logmytrip.R.layout;
-import com.cachirulop.logmytrip.R.menu;
-
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.ToggleButton;
+
+import com.cachirulop.logmytrip.R;
+import com.cachirulop.logmytrip.service.BackgroundLocationService;
+import com.google.android.gms.location.LocationClient;
 
 public class MainActivity
         extends Activity
 {
+	LocationClient _locClient;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -80,7 +80,24 @@ public class MainActivity
     
     public void onActivateServiceClick (View v) 
     {
+        // Is the toggle on?
+        boolean on = ((ToggleButton) v).isChecked();
         
+        if (on) {
+        	startService(new Intent(this, BackgroundLocationService.class));
+        } else {
+        	stopService(new Intent(this, BackgroundLocationService.class));
+        }
+    }
+    
+    public void onActivateServiceClick2 (View v) 
+    {
+        // Is the toggle on?
+        boolean on = ((ToggleButton) v).isChecked();
+        
+        if (on) {
+        	;
+        }
     }
 
 }
