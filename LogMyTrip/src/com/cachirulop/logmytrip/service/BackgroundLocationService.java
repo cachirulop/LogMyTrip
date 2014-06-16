@@ -133,6 +133,8 @@ public class BackgroundLocationService extends Service implements
         
         note = builder.build();
         
+        // TODO: Call to stopForeground when the service is stopped
+        // TODO: Assign a constant replacing 1337 (it can't be 0)
         startForeground(1337, note);
         
         return START_STICKY;

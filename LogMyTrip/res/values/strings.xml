@@ -8,5 +8,13 @@
     <string name="tbActivateServiceText">Activate service</string>
     <string name="tvActivateServiceDescText">Activate service</string>
     <string name="tvSavedLogsDescText">Saved logs</string>
-
+    
+    <!-- Preferences -->
+    <string name="pref_autoStartLogCategoryTitle">Auto start</string>
+    <string name="pref_autoStartLogSummary">Autosave position when disconnect from a bluetooth device</string>
+    <string name="pref_autoStartLogTitle">Auto save position</string>
+    <string name="pref_bluetoothDeviceSummary">Bluetooth paired devices</string>
+    <string name="pref_bluetoothDeviceTitle">Bluetooth devices</string>    
+    
+    <string name="pref_bluetoothNotFound">Bluetooth adapter not found</string>
 </resources>

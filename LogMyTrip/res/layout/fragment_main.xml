@@ -34,13 +34,6 @@
         
     </RelativeLayout>
 
-        <ToggleButton
-            android:id="@+id/tbActivateService2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tbActivateServiceText"
-            android:onClick="onActivateServiceClick2" />
-        
         <TextView
         android:id="@+id/tvSavedLogsDesc"
         android:layout_width="wrap_content"
