@@ -28,6 +28,8 @@ public class BluetoothBroadcastReceiver
         if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals (action)) {
             Toast.makeText (context, "Device disconnected", Toast.LENGTH_LONG).show ();
         }
+        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals (action)) {
+            Toast.makeText (context, "Device connected", Toast.LENGTH_LONG).show ();
+        }        
     }
-
 }

@@ -12,6 +12,7 @@ import android.widget.ToggleButton;
 import com.cachirulop.logmytrip.R;
 import com.cachirulop.logmytrip.fragment.MainFragment;
 import com.cachirulop.logmytrip.service.BackgroundLocationService;
+import com.cachirulop.logmytrip.service.LogMyTripService;
 
 public class MainActivity
         extends Activity
@@ -28,6 +29,8 @@ public class MainActivity
             getFragmentManager ().beginTransaction ().add (R.id.container,
                                                            new MainFragment ()).commit ();
         }
+        
+        startService (new Intent (this, LogMyTripService.class));
     }
 
     @Override

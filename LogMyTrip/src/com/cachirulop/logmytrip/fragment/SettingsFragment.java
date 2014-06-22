@@ -3,10 +3,11 @@ package com.cachirulop.logmytrip.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.cachirulop.logmytrip.R;
+import com.cachirulop.logmytrip.manager.ServiceManager;
+import com.cachirulop.logmytrip.manager.SettingsManager;
 
 public class SettingsFragment
         extends PreferenceFragment
@@ -24,13 +25,14 @@ public class SettingsFragment
     public void onSharedPreferenceChanged (SharedPreferences sharedPreferences,
                                            String key)
     {
-//        if (key.equals (SettingsManager.KEY_PREF_MAP_MODE)) {
-//            Preference connectionPref = findPreference (key);
-//
-//            // Set summary to be the user-description for the selected value
-//            connectionPref.setSummary (SettingsManager.getMapModeDesc ());
-//        }
-
+        if (SettingsManager.KEY_PREF_AUTO_START_LOG.equals (key)) {
+            if (SettingsManager.getAutoStartLog (this.getActivity ())) {
+                ServiceManager.registerBluetoothBroadcastReceiver (this.getActivity ());
+            }
+            else {
+                ServiceManager.unregisterBluetoothBroadcastReceiver (this.getActivity ());
+            }
+        }
     }
 
     @Override

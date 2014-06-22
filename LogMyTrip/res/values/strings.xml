@@ -5,16 +5,24 @@
     <string name="action_settings">Settings</string>
 
     <!-- Main activity -->
-    <string name="tbActivateServiceText">Activate service</string>
-    <string name="tvActivateServiceDescText">Activate service</string>
-    <string name="tvSavedLogsDescText">Saved logs</string>
+    <string name="tbActivateServiceText">Save trip</string>
+    <string name="tvActivateServiceDescText">Start/Stop saving the current trip</string>
+    <string name="tvSavedLogsDescText">Saved trips</string>
     
     <!-- Preferences -->
-    <string name="pref_autoStartLogCategoryTitle">Auto start</string>
-    <string name="pref_autoStartLogSummary">Autosave position when disconnect from a bluetooth device</string>
-    <string name="pref_autoStartLogTitle">Auto save position</string>
-    <string name="pref_bluetoothDeviceSummary">Bluetooth paired devices</string>
+    <string name="pref_autoStartLogCategoryTitle">Auto save</string>
+    <string name="pref_autoStartLogTitle">Auto save trip</string>
+    <string name="pref_autoStartLogSummary">Start saving trip when connect to a bluetooth device</string>
     <string name="pref_bluetoothDeviceTitle">Bluetooth devices</string>    
+    <string name="pref_bluetoothDeviceSummary">Select bluetooth devices to start saving the trip when connect</string>
+    <string name="pref_bluetoothDeviceListTitle">Bluetooth paired devices</string>
     
     <string name="pref_bluetoothNotFound">Bluetooth adapter not found</string>
+    
+    <!-- Notification -->
+    <string name="notif_Title">Log my trip</string>
+    <string name="notif_Tricker">Starting Log my trip service</string>
+    <string name="notif_ContentWaitingBluetooth">Waiting bluetooth</string>
+    
+    <string-array name="empty_array"/>
 </resources>
