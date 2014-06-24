@@ -12,7 +12,7 @@ import com.cachirulop.logmytrip.activity.MainActivity;
 
 public class NotifyManager
 {
-    private static final int NOTIFICATION_ID = 1133;
+    public static final int NOTIFICATION_ID = 1133;
 
     private static NotificationManager getManager (Context ctx)
     {

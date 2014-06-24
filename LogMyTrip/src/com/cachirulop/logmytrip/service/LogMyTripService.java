@@ -1,7 +1,6 @@
 
 package com.cachirulop.logmytrip.service;
 
-import util.ToastHelper;
 import android.app.Notification;
 import android.app.Service;
 import android.bluetooth.BluetoothDevice;
@@ -16,6 +15,7 @@ import com.cachirulop.logmytrip.R;
 import com.cachirulop.logmytrip.manager.NotifyManager;
 import com.cachirulop.logmytrip.manager.SettingsManager;
 import com.cachirulop.logmytrip.receiver.BluetoothBroadcastReceiver;
+import com.cachirulop.logmytrip.util.ToastHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;

@@ -45,6 +45,7 @@
         </activity>
 
         <service android:name="com.cachirulop.logmytrip.service.LogMyTripService" />
+        <service android:name="com.cachirulop.logmytrip.service.BluetoothReceiverService" />        
 
         <receiver
             android:name="com.cachirulop.logmytrip.receiver.BootCompletedBroadcastReceiver"

@@ -1,4 +1,4 @@
-package util;
+package com.cachirulop.logmytrip.util;
 
 import android.content.Context;
 import android.widget.Toast;
