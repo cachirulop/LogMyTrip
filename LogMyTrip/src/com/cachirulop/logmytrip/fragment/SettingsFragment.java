@@ -27,10 +27,10 @@ public class SettingsFragment
     {
         if (SettingsManager.KEY_PREF_AUTO_START_LOG.equals (key)) {
             if (SettingsManager.getAutoStartLog (this.getActivity ())) {
-                ServiceManager.registerBluetoothBroadcastReceiver (this.getActivity ());
+                ServiceManager.startBluetoothService (this.getActivity ());
             }
             else {
-                ServiceManager.unregisterBluetoothBroadcastReceiver (this.getActivity ());
+                ServiceManager.stopBluetoothService (this.getActivity ());
             }
         }
     }

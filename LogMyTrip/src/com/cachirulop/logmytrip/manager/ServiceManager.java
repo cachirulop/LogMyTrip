@@ -1,18 +1,26 @@
 
 package com.cachirulop.logmytrip.manager;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 
-import com.cachirulop.logmytrip.service.LogMyTripService;
-import com.cachirulop.logmytrip.service.LogMyTripService.LogMyTrackServiceLocalBinder;
+import com.cachirulop.logmytrip.service.BluetoothReceiverService;
 
 public class ServiceManager
 {
-
+    public static void startBluetoothService (Context ctx)
+    {
+        ctx.startService (new Intent (ctx,
+                                      BluetoothReceiverService.class));
+    }
+    
+    public static void stopBluetoothService (Context ctx) 
+    {
+        ctx.stopService (new Intent (ctx,
+                                     BluetoothReceiverService.class));
+    }
+    
+/*
     public static void startService (Context ctx)
     {
         ctx.startService (new Intent (ctx,
@@ -56,4 +64,5 @@ public class ServiceManager
         Intent intent = new Intent(ctx, LogMyTripService.class);
         ctx.bindService(intent, _connection, Context.BIND_AUTO_CREATE);
     }
+*/    
 }
