@@ -1,6 +1,8 @@
 
 package com.cachirulop.logmytrip.receiver;
 
+import com.cachirulop.logmytrip.manager.ServiceManager;
+
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +14,7 @@ public class BluetoothBroadcastReceiver
 {
 
     @Override
-    public void onReceive (Context context,
+    public void onReceive (Context ctx,
                            Intent intent)
     {
         String action;
@@ -21,15 +23,20 @@ public class BluetoothBroadcastReceiver
         action = intent.getAction ();
         device = intent.getParcelableExtra (BluetoothDevice.EXTRA_DEVICE);
 
-        Toast.makeText (context,
+        Toast.makeText (ctx,
                         "Bluetooth broadcast receive: action: " + action + ", device: " + device.getAddress () + " - " + device.getName (),
                         Toast.LENGTH_SHORT).show ();
 
+        // TODO: Test if the device is configured
         if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals (action)) {
-            Toast.makeText (context, "Device disconnected", Toast.LENGTH_LONG).show ();
+            Toast.makeText (ctx, "Device disconnected", Toast.LENGTH_LONG).show ();
+            
+            ServiceManager.stopSaveTrip (ctx);
         }
         else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals (action)) {
-            Toast.makeText (context, "Device connected", Toast.LENGTH_LONG).show ();
+            Toast.makeText (ctx, "Device connected", Toast.LENGTH_LONG).show ();
+
+            ServiceManager.startSaveTrip (ctx);
         }        
     }
 }

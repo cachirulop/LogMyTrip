@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ToggleButton;
 
 import com.cachirulop.logmytrip.R;
 import com.cachirulop.logmytrip.fragment.MainFragment;
-import com.cachirulop.logmytrip.service.BackgroundLocationService;
 import com.cachirulop.logmytrip.service.LogMyTripService;
 
 public class MainActivity
@@ -72,20 +69,5 @@ public class MainActivity
         startActivityForResult (new Intent (this,
                                             SettingsActivity.class),
                                 ACTIVITY_RESULT_SETTINGS);
-    }
-
-    public void onActivateServiceClick (View v)
-    {
-        // Is the toggle on?
-//        boolean on = ((ToggleButton) v).isChecked ();
-//
-//        if (on) {
-//            startService (new Intent (this,
-//                                      BackgroundLocationService.class));
-//        }
-//        else {
-//            stopService (new Intent (this,
-//                                     BackgroundLocationService.class));
-//        }
     }
 }

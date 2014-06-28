@@ -17,28 +17,27 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/tvActivateServiceDesc"
+            android:id="@+id/tvSaveTripDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tbActivateService"
+            android:layout_alignBaseline="@+id/tbSaveTrip"
             android:layout_alignParentLeft="true"
-            android:text="@string/tvActivateServiceDescText" />
+            android:text="@string/tvSaveTripDescText" />
         
         <ToggleButton
-            android:id="@+id/tbActivateService"
+            android:id="@+id/tbSaveTrip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/tbActivateServiceText"
-            android:onClick="onActivateServiceClick" />
+            android:text="@string/tbSaveTripText" />
         
     </RelativeLayout>
 
         <TextView
-        android:id="@+id/tvSavedLogsDesc"
+        android:id="@+id/tvSavedTripsDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tvSavedLogsDescText" />
+        android:text="@string/tvSavedTripsDescText" />
 
     <ListView
         android:id="@+id/listView1"

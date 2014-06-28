@@ -4,65 +4,35 @@ package com.cachirulop.logmytrip.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.cachirulop.logmytrip.service.BluetoothReceiverService;
+import com.cachirulop.logmytrip.service.LogMyTripService;
 
 public class ServiceManager
 {
-    public static void startBluetoothService (Context ctx)
-    {
-        ctx.startService (new Intent (ctx,
-                                      BluetoothReceiverService.class));
-    }
-    
-    public static void stopBluetoothService (Context ctx) 
-    {
-        ctx.stopService (new Intent (ctx,
-                                     BluetoothReceiverService.class));
-    }
-    
-/*
-    public static void startService (Context ctx)
+    /**
+     * Starts or stops the service. 
+     * 
+     * The service itself decide if it should start or it should stop in the 
+     * OnStartService event.
+     * 
+     * @param ctx Context to start the service
+     */
+    public static void startStopService (Context ctx)
     {
         ctx.startService (new Intent (ctx,
                                       LogMyTripService.class));
     }
     
-    public static void registerBluetoothBroadcastReceiver (Context ctx) 
+    public static void startSaveTrip (Context ctx) 
     {
-        final ServiceConnection _connection = new ServiceConnection() {
-            public void onServiceConnected(ComponentName className, IBinder service) {
-                LogMyTrackServiceLocalBinder binder = (LogMyTrackServiceLocalBinder) service;
-                LogMyTripService tlService;
-
-                tlService = binder.getServerInstance();
-                tlService.registerBluetoothReceiver ();
-            }
-
-            public void onServiceDisconnected(ComponentName className) {
-            }
-        };
+        SettingsManager.setLogTrip (ctx, true);
         
-        Intent intent = new Intent(ctx, LogMyTripService.class);
-        ctx.bindService(intent, _connection, Context.BIND_AUTO_CREATE);
+        startStopService (ctx);
     }
-    
-    public static void unregisterBluetoothBroadcastReceiver (Context ctx) 
+
+    public static void stopSaveTrip (Context ctx) 
     {
-        final ServiceConnection _connection = new ServiceConnection() {
-            public void onServiceConnected(ComponentName className, IBinder service) {
-                LogMyTrackServiceLocalBinder binder = (LogMyTrackServiceLocalBinder) service;
-                LogMyTripService tlService;
-
-                tlService = binder.getServerInstance();
-                tlService.unregisterBluetoothReceiver ();
-            }
-
-            public void onServiceDisconnected(ComponentName className) {
-            }
-        };
+        SettingsManager.setLogTrip (ctx, false);
         
-        Intent intent = new Intent(ctx, LogMyTripService.class);
-        ctx.bindService(intent, _connection, Context.BIND_AUTO_CREATE);
+        startStopService (ctx);
     }
-*/    
 }

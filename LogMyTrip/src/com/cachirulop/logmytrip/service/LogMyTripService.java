@@ -18,6 +18,7 @@ import com.cachirulop.logmytrip.receiver.BluetoothBroadcastReceiver;
 import com.cachirulop.logmytrip.util.ToastHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -29,12 +30,12 @@ public class LogMyTripService
 {
     private static final long          LOCATION_UPDATE_INTERVAL         = 5000;
     private static final long          LOCATION_UPDATE_FASTEST_INTERVAL = 5000;
-    private static final int           FOREGROUND_ID                    = 33233;
 
     private LocationClient             _locationClient;
     private LocationRequest            _locationRequest;
 
     private BluetoothBroadcastReceiver _btReceiver;
+    private Object                     _lckReceiver                     = new Object ();
 
     IBinder                            _binder                          = new LogMyTrackServiceLocalBinder ();
 
@@ -44,7 +45,16 @@ public class LogMyTripService
         super.onCreate ();
 
         initLocation ();
-        initBluetooth ();
+    }
+
+    @Override
+    public void onDestroy ()
+    {
+        if (_locationClient != null) {
+            stopLog ();
+        }
+
+        super.onDestroy ();
     }
 
     private void initLocation ()
@@ -54,14 +64,16 @@ public class LogMyTripService
         _locationRequest.setInterval (LOCATION_UPDATE_INTERVAL);
         _locationRequest.setFastestInterval (LOCATION_UPDATE_FASTEST_INTERVAL);
 
-        _locationClient = new LocationClient (this,
-                                              this,
-                                              this);
+        ensureLocationClient ();
     }
 
-    private void initBluetooth ()
+    private void ensureLocationClient ()
     {
-        _btReceiver = new BluetoothBroadcastReceiver ();
+        if (_locationClient == null) {
+            _locationClient = new LocationClient (this,
+                                                  this,
+                                                  this);
+        }
     }
 
     @Override
@@ -69,56 +81,141 @@ public class LogMyTripService
                                int flags,
                                int startId)
     {
-        ToastHelper.showDebug (this,
-                               "LogMyTripService.onStartCommand: starting service");
+
+        if (!isGooglePlayServicesAvailable ()) {
+            ToastHelper.showLong (this,
+                                  getString (R.string.msg_GooglePlayServicesUnavailable));
+
+            return Service.START_NOT_STICKY;
+        }
+        else {
+            ToastHelper.showDebug (this,
+                                   "LogMyTripService.onStartCommand: starting service");
+
+        }
 
         super.onStartCommand (intent,
                               flags,
                               startId);
-        
-        if (SettingsManager.getAutoStartLog (this)) {
-            registerBluetoothReceiver ();
+
+        boolean bluetooth;
+        boolean logs;
+
+        bluetooth = SettingsManager.getAutoStartLog (this);
+        logs = SettingsManager.getLogTrip (this);
+
+        synchronized (_lckReceiver) {
+            if (bluetooth) {
+                registerBluetoothReceiver ();
+            }
+            else {
+                unregisterBluetoothReceiver ();
+            }
+        }
+
+        if (logs) {
+            startLog ();
+        }
+        else {
+            stopLog ();
+        }
+
+        if (bluetooth || logs) {
+            startForegroundService (bluetooth,
+                                    logs);
+        }
+        else {
+            stopForegroundService ();
         }
 
         return START_STICKY;
     }
-    
-    public void startLog () 
+
+    private void startLog ()
     {
+        ensureLocationClient ();
         if (!_locationClient.isConnected () && !_locationClient.isConnecting ()) {
             _locationClient.connect ();
-
-            // TODO: update the notification message
         }
     }
 
-    public void registerBluetoothReceiver ()
+    private void stopLog ()
     {
-        registerReceiver (_btReceiver,
-                          new IntentFilter (BluetoothDevice.ACTION_ACL_DISCONNECTED));
+        ensureLocationClient ();
+        if (_locationClient.isConnected () || _locationClient.isConnecting ()) {
+            _locationClient.removeLocationUpdates (this);
+        }
+    }
 
-        registerReceiver (_btReceiver,
-                          new IntentFilter (BluetoothDevice.ACTION_ACL_CONNECTED));
-        
+    private void stopForegroundService ()
+    {
+        stopForeground (true);
+        stopSelf ();
+    }
+
+    private void startForegroundService (boolean bluetooth,
+                                         boolean logTrip)
+    {
         Notification note;
+        int contentId;
 
+        if (bluetooth) {
+            contentId = R.string.notif_ContentWaitingBluetooth;
+        }
+        else {
+            contentId = R.string.notif_ContentSavingTrip;
+        }
+
+        // TODO: Specify the correct icon
         note = NotifyManager.createNotification (this,
-                                                 R.string.notif_ContentWaitingBluetooth);
+                                                 contentId);
 
-        startForeground (FOREGROUND_ID,
+        startForeground (NotifyManager.NOTIFICATION_ID,
                          note);
     }
 
-    public void unregisterBluetoothReceiver ()
+    private void registerBluetoothReceiver ()
     {
-        unregisterReceiver (_btReceiver);
-        stopForeground (true);
+        if (_btReceiver == null) {
+            _btReceiver = new BluetoothBroadcastReceiver ();
+
+            registerReceiver (_btReceiver,
+                              new IntentFilter (BluetoothDevice.ACTION_ACL_DISCONNECTED));
+
+            registerReceiver (_btReceiver,
+                              new IntentFilter (BluetoothDevice.ACTION_ACL_CONNECTED));
+        }
     }
-    
-    @Override
-    public void onLocationChanged (Location arg0)
+
+    private void unregisterBluetoothReceiver ()
     {
-        // TODO Auto-generated method stub
+        if (_btReceiver != null) {
+            unregisterReceiver (_btReceiver);
+
+            _btReceiver = null;
+        }
+    }
+
+    private boolean isGooglePlayServicesAvailable ()
+    {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable (this);
+
+        if (ConnectionResult.SUCCESS == resultCode) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void onLocationChanged (Location loc)
+    {
+        // TODO: Save to the database
+        ToastHelper.showShortDebug (this,
+                                    "LogMyTripService.onLocationChanged: " +
+                                            loc.getLatitude () + "-.-" +
+                                            loc.getLongitude ());
 
     }
 
@@ -126,21 +223,19 @@ public class LogMyTripService
     public void onConnectionFailed (ConnectionResult arg0)
     {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void onConnected (Bundle arg0)
     {
-        // TODO Auto-generated method stub
-
+        _locationClient.requestLocationUpdates (_locationRequest,
+                                                this);
     }
 
     @Override
     public void onDisconnected ()
     {
-        // TODO Auto-generated method stub
-
+        _locationClient = null;
     }
 
     @Override

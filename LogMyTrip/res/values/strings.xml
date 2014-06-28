@@ -5,9 +5,9 @@
     <string name="action_settings">Settings</string>
 
     <!-- Main activity -->
-    <string name="tbActivateServiceText">Save trip</string>
-    <string name="tvActivateServiceDescText">Start/Stop saving the current trip</string>
-    <string name="tvSavedLogsDescText">Saved trips</string>
+    <string name="tbSaveTripText">Save trip</string>
+    <string name="tvSaveTripDescText">Start/Stop saving the current trip</string>
+    <string name="tvSavedTripsDescText">Saved trips</string>
     
     <!-- Preferences -->
     <string name="pref_autoStartLogCategoryTitle">Auto save</string>
@@ -23,6 +23,10 @@
     <string name="notif_Title">Log my trip</string>
     <string name="notif_Tricker">Starting Log my trip service</string>
     <string name="notif_ContentWaitingBluetooth">Waiting bluetooth</string>
+    <string name="notif_ContentSavingTrip">Saving the current trip</string>
+    
+    <!-- Messages -->
+    <string name="msg_GooglePlayServicesUnavailable">Google Play Services unavailable, can not continue</string>
     
     <string-array name="empty_array"/>
 </resources>
