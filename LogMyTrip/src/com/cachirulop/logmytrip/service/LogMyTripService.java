@@ -7,13 +7,14 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 
 import com.cachirulop.logmytrip.R;
+import com.cachirulop.logmytrip.entity.Trip;
 import com.cachirulop.logmytrip.manager.NotifyManager;
 import com.cachirulop.logmytrip.manager.SettingsManager;
+import com.cachirulop.logmytrip.manager.TripManager;
 import com.cachirulop.logmytrip.receiver.BluetoothBroadcastReceiver;
 import com.cachirulop.logmytrip.util.ToastHelper;
 import com.google.android.gms.common.ConnectionResult;
@@ -37,7 +38,7 @@ public class LogMyTripService
     private BluetoothBroadcastReceiver _btReceiver;
     private Object                     _lckReceiver                     = new Object ();
 
-    IBinder                            _binder                          = new LogMyTrackServiceLocalBinder ();
+    private Trip                       _currentTrip                     = null;
 
     @Override
     public void onCreate ()
@@ -141,6 +142,11 @@ public class LogMyTripService
 
     private void stopLog ()
     {
+        if (_currentTrip != null) {
+            TripManager.finishTrip (this, _currentTrip);
+            _currentTrip = null;
+        }
+
         ensureLocationClient ();
         if (_locationClient.isConnected () || _locationClient.isConnecting ()) {
             _locationClient.removeLocationUpdates (this);
@@ -211,6 +217,10 @@ public class LogMyTripService
     @Override
     public void onLocationChanged (Location loc)
     {
+        if (_currentTrip == null) {
+            _currentTrip = TripManager.getCurrentTrip (this);            
+        }
+        
         // TODO: Save to the database
         ToastHelper.showShortDebug (this,
                                     "LogMyTripService.onLocationChanged: " +
@@ -241,16 +251,7 @@ public class LogMyTripService
     @Override
     public IBinder onBind (Intent intent)
     {
-        return _binder;
-    }
-
-    public class LogMyTrackServiceLocalBinder
-            extends Binder
-    {
-        public LogMyTripService getServerInstance ()
-        {
-            return LogMyTripService.this;
-        }
+        return null;
     }
 
 }
