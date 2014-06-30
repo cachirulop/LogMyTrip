@@ -22,15 +22,19 @@ public class ToastHelper
     
     public static void showDebug (Context ctx, String msg)
     {
+/*
         Toast.makeText (ctx,
                         msg,
-                        Toast.LENGTH_LONG).show ();        
+                        Toast.LENGTH_LONG).show ();
+*/        
     }
     
     public static void showShortDebug (Context ctx, String msg)
     {
+/*        
         Toast.makeText (ctx,
                         msg,
-                        Toast.LENGTH_SHORT).show ();        
+                        Toast.LENGTH_SHORT).show ();
+*/        
     }    
 }

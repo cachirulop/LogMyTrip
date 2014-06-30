@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.cachirulop.logmytrip.R;
 import com.cachirulop.logmytrip.data.LogMyTripDataHelper;
 import com.cachirulop.logmytrip.entity.Trip;
+import com.cachirulop.logmytrip.entity.TripLocation;
 
 public class TripManager
 {
@@ -74,8 +75,11 @@ public class TripManager
                         t.getTripDate ().getTime ());
             values.put ("description",
                         t.getDescription ());
-            values.put ("finish_date",
-                        t.getFinishDate ().getTime ());
+
+            if (t.isFinished ()) {
+                values.put ("finish_date",
+                            t.getFinishDate ().getTime ());
+            }
 
             if (isInsert) {
                 db.insert (CONST_TRIP_TABLE_NAME,
@@ -92,6 +96,46 @@ public class TripManager
             t.setId (getLastIdTrip (ctx));
 
             return t;
+        }
+        finally {
+            if (db != null) {
+                db.close ();
+            }
+        }
+    }
+
+    public static TripLocation saveTripLocation (Context ctx,
+                                                 TripLocation tl)
+    {
+        SQLiteDatabase db = null;
+
+        try {
+            db = new LogMyTripDataHelper (ctx).getWritableDatabase ();
+
+            ContentValues values;
+
+            values = new ContentValues ();
+
+            values.put ("id_trip",
+                        tl.getIdTrip ());
+            values.put ("location_time",
+                        tl.getLocationTime ());
+            values.put ("latitude",
+                        tl.getLatitude ());
+            values.put ("longitude",
+                        tl.getLongitude ());
+            values.put ("altitude",
+                        tl.getAltitude ());
+            values.put ("speed",
+                        tl.getSpeed ());
+
+            db.insert (CONST_LOCATION_TABLE_NAME,
+                       null,
+                       values);
+
+            tl.setId (getLastIdTripLocation (ctx));
+
+            return tl;
         }
         finally {
             if (db != null) {
@@ -135,7 +179,12 @@ public class TripManager
      */
     private static long getLastIdTrip (Context ctx)
     {
-        return new LogMyTripDataHelper (ctx).getLastId ("trip");
+        return new LogMyTripDataHelper (ctx).getLastId (CONST_TRIP_TABLE_NAME);
+    }
+
+    private static long getLastIdTripLocation (Context ctx)
+    {
+        return new LogMyTripDataHelper (ctx).getLastId (CONST_LOCATION_TABLE_NAME);
     }
 
 }

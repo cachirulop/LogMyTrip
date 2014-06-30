@@ -12,6 +12,7 @@ import android.os.IBinder;
 
 import com.cachirulop.logmytrip.R;
 import com.cachirulop.logmytrip.entity.Trip;
+import com.cachirulop.logmytrip.entity.TripLocation;
 import com.cachirulop.logmytrip.manager.NotifyManager;
 import com.cachirulop.logmytrip.manager.SettingsManager;
 import com.cachirulop.logmytrip.manager.TripManager;
@@ -29,8 +30,8 @@ public class LogMyTripService
         implements GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener, LocationListener
 {
-    private static final long          LOCATION_UPDATE_INTERVAL         = 5000;
-    private static final long          LOCATION_UPDATE_FASTEST_INTERVAL = 5000;
+    private static final long          LOCATION_UPDATE_INTERVAL         = 1000 * 60 * 5; // 5 minutes
+    private static final long          LOCATION_UPDATE_FASTEST_INTERVAL = 1000 * 60;
 
     private LocationClient             _locationClient;
     private LocationRequest            _locationRequest;
@@ -61,7 +62,8 @@ public class LogMyTripService
     private void initLocation ()
     {
         _locationRequest = LocationRequest.create ();
-        _locationRequest.setPriority (LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // _locationRequest.setPriority (LocationRequest.PRIORITY_HIGH_ACCURACY);
+        _locationRequest.setPriority (LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         _locationRequest.setInterval (LOCATION_UPDATE_INTERVAL);
         _locationRequest.setFastestInterval (LOCATION_UPDATE_FASTEST_INTERVAL);
 
@@ -220,13 +222,32 @@ public class LogMyTripService
         if (_currentTrip == null) {
             _currentTrip = TripManager.getCurrentTrip (this);            
         }
+
+        TripLocation tl;
         
-        // TODO: Save to the database
+        tl = convertLocation (loc);
+        TripManager.saveTripLocation (this, tl);
+
         ToastHelper.showShortDebug (this,
                                     "LogMyTripService.onLocationChanged: " +
                                             loc.getLatitude () + "-.-" +
                                             loc.getLongitude ());
 
+    }
+    
+    private TripLocation convertLocation (Location loc)
+    {
+        TripLocation result;
+        
+        result = new TripLocation();
+        result.setIdTrip (_currentTrip.getId ());
+        result.setLocationTime (loc.getTime ());
+        result.setLatitude (loc.getLatitude ());
+        result.setLongitude (loc.getLongitude ());
+        result.setAltitude (loc.getAltitude ());
+        result.setSpeed (loc.getSpeed ());
+        
+        return result;
     }
 
     @Override
